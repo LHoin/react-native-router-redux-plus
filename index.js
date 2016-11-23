@@ -1,4 +1,4 @@
-import React, { Navigator, StyleSheet, View } from 'react-native';
+import React, { Navigator, StyleSheet, View, BackAndroid } from 'react-native';
 import Animations from './src/Animations';
 import { NavBar } from './src/NavBar';
 import TabBar from './src/TabBar';
@@ -140,6 +140,17 @@ class Router extends React.Component {
 
   componentDidMount() {
     this.props.actions.init(this.initial);
+
+    let backAction = () => {
+      if (this.props.router.routes.length > 1) {
+        this.props.actions.pop();
+        return true;
+      } else {
+        BackAndroid.removeEventListener('hardwareBackPress', backAction);
+        return false;
+      }
+    };
+    BackAndroid.addEventListener('hardwareBackPress', backAction);
   }
 
   componentWillReceiveProps(nextProps) {
